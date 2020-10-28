@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import UserContext from '../userContext';
+import Context from '../Context';
 import { Route, Redirect } from 'react-router-dom';
 
 /* 
@@ -12,7 +12,7 @@ import { Route, Redirect } from 'react-router-dom';
     }
 */
 const ProtectedRoute = ({ component: Component, ...rest }) => {
-  const { state } = useContext(UserContext);
+  const { state } = useContext(Context);
   return (
     <Route
       /*props = props from Route */

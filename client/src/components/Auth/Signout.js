@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Typography from '@material-ui/core/Typography';
 import { GoogleLogout } from 'react-google-login';
-import UserContext from '../../userContext';
+import UserContext from '../../Context';
 
 const Signout = ({ classes }) => {
   const { dispatch } = useContext(UserContext);

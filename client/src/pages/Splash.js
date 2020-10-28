@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import Login from '../components/Auth/Login';
-import UserContext from '../userContext';
+import UserContext from '../Context';
 import { Redirect } from 'react-router-dom';
 
 const Splash = () => {

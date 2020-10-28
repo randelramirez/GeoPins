@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { GraphQLClient } from 'graphql-request'; /* alternative to apollo */
 import { GoogleLogin } from 'react-google-login';
 import { withStyles } from '@material-ui/core/styles';
-import UserContext from '../../userContext';
+import UserContext from '../../Context';
 import { ME_QUERY } from '../../graphql/queries';
 import Typography from '@material-ui/core/Typography';
 

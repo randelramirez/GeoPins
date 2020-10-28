@@ -1,7 +1,7 @@
 import React, { useContext, useReducer } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import UserContext from './userContext';
+import Context from './Context';
 import reducer from './reducer';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -12,17 +12,17 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import * as serviceWorker from './serviceWorker';
 
 const Root = () => {
-  const initialState = useContext(UserContext);
+  const initialState = useContext(Context);
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
     <Router>
-      <UserContext.Provider value={{ state, dispatch }}>
+      <Context.Provider value={{ state, dispatch }}>
         <Switch>
           <ProtectedRoute exact path="/" component={App} />
           <Route path="/login" component={Splash} />
         </Switch>
-      </UserContext.Provider>
+      </Context.Provider>
     </Router>
   );
 };

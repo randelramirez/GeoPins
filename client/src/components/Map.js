@@ -6,9 +6,10 @@ import React, {
   useContext,
 } from 'react';
 import ReactMapGL, { NavigationControl, Marker } from 'react-map-gl';
+import Blog from './Blog';
 import { withStyles } from '@material-ui/core/styles';
 import PinIcon from '../components/PinIcon';
-import UserContext from '../userContext';
+import Context from '../Context';
 // import Button from "@material-ui/core/Button";
 // import Typography from "@material-ui/core/Typography";
 // import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
@@ -26,7 +27,7 @@ const INITIAL_VIEW_PORT = {
 };
 
 const Map = ({ classes }) => {
-  const { state, dispatch } = useContext(UserContext);
+  const { state, dispatch } = useContext(Context);
   const [viewport, setViewPort] = useState(INITIAL_VIEW_PORT);
   const [userPosition, setUserPosition] = useState(null);
 
@@ -107,6 +108,8 @@ const Map = ({ classes }) => {
           </Marker>
         )}
       </ReactMapGL>
+      {/* Blog Area to Add Pin Content */}
+      <Blog />
     </div>
   );
 };
