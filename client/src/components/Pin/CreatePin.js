@@ -9,6 +9,7 @@ import LandscapeIcon from '@material-ui/icons/LandscapeOutlined';
 import Context from '../../Context';
 import ClearIcon from '@material-ui/icons/Clear';
 import SaveIcon from '@material-ui/icons/SaveTwoTone';
+import { GET_PINS_QUERY } from '../../graphql/queries';
 import { CREATE_PIN_MUTATION } from '../../graphql/mutations';
 import { useClient } from '../../client';
 
@@ -50,6 +51,11 @@ const CreatePin = ({ classes }) => {
       );
       console.log('Created Pin at: ', createPin);
       handleDeleteDraft();
+
+      // refresh map with newly created pin
+      const { getPins } = await client.request(GET_PINS_QUERY);
+
+      dispatch({ type: 'GET_PINS', payload: getPins });
     } catch (error) {
       setSubmitting(false);
       console.error('Error creating pin', error);
