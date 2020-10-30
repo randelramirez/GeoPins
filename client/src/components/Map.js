@@ -10,6 +10,8 @@ import Blog from './Blog';
 import { withStyles } from '@material-ui/core/styles';
 import PinIcon from '../components/PinIcon';
 import Context from '../Context';
+import { useClient } from '../client';
+import { GET_PINS_QUERY } from '../graphql/queries';
 // import Button from "@material-ui/core/Button";
 // import Typography from "@material-ui/core/Typography";
 // import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
@@ -30,6 +32,7 @@ const Map = ({ classes }) => {
   const { state, dispatch } = useContext(Context);
   const [viewport, setViewPort] = useState(INITIAL_VIEW_PORT);
   const [userPosition, setUserPosition] = useState(null);
+  const client = useRef(useClient());
 
   /*
     we need to wrap it in useRef because it's an object and its value is always treated as new on each render 
@@ -53,9 +56,19 @@ const Map = ({ classes }) => {
     }
   }, []);
 
+  const getPins = useCallback(async () => {
+    const { getPins } = await client.current.request(GET_PINS_QUERY);
+    console.log(getPins);
+    dispatch({ type: 'GET_PINS', payload: getPins });
+  }, [dispatch]); // client is causing infinite re-render
+
   useEffect(() => {
     getUserPosition();
   }, [getUserPosition]);
+
+  useEffect(() => {
+    getPins();
+  }, [getPins]);
 
   const handleMapClick = ({ lngLat, leftButton }) => {
     if (!leftButton) return;
@@ -107,6 +120,18 @@ const Map = ({ classes }) => {
             <PinIcon size={40} color="hotpink"></PinIcon>
           </Marker>
         )}
+        {/* Created Pins */}
+        {state.pins.map((pin) => (
+          <Marker
+            key={pin._id}
+            latitude={pin.latitude}
+            longitude={pin.longitude}
+            offsetLeft={-19}
+            offsetTop={-37}
+          >
+            <PinIcon size={40} color="darkblue" />
+          </Marker>
+        ))}
       </ReactMapGL>
       {/* Blog Area to Add Pin Content */}
       <Blog />
