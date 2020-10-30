@@ -17,6 +17,12 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/DeleteTwoTone';
 import { DELETE_PIN_MUTATION } from '../graphql/mutations';
+import { Subscription } from 'react-apollo';
+import {
+  PIN_ADDED_SUBSCRIPTION,
+  PIN_UPDATED_SUBSCRIPTION,
+  PIN_DELETED_SUBSCRIPTION,
+} from '../graphql/subscriptions';
 
 const INITIAL_VIEW_PORT = {
   latitude: 37.7577,
@@ -199,6 +205,15 @@ const Map = ({ classes }) => {
           </Popup>
         )}
       </ReactMapGL>
+      {/* Subscriptions for creating / Updating / Deleting Pins */}
+      {/* <Subscription
+        subscription={PIN_ADDED_SUBSCRIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { pinAdded } = subscriptionData.data;
+          dispatch({ type: 'CREATE_PIN', payload: pinAdded });
+        }}
+      /> */}
+
       {/* Blog Area to Add Pin Content */}
       <Blog />
     </div>

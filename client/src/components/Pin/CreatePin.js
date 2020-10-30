@@ -49,13 +49,16 @@ const CreatePin = ({ classes }) => {
         CREATE_PIN_MUTATION,
         variables
       );
-      console.log('Created Pin at: ', createPin);
+
       handleDeleteDraft();
 
       // refresh map with newly created pin
-      const { getPins } = await client.request(GET_PINS_QUERY);
+      // const { getPins } = await client.request(GET_PINS_QUERY);
 
-      dispatch({ type: 'GET_PINS', payload: getPins });
+      // dispatch({ type: 'GET_PINS', payload: getPins });
+
+      // or just add the result of the successful mutation  in the current pins in the state
+      dispatch({ type: 'CREATE_PIN', payload: createPin });
     } catch (error) {
       setSubmitting(false);
       console.error('Error creating pin', error);
