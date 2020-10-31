@@ -16,12 +16,13 @@ const CreateComment = ({ classes }) => {
 
   const handleSubmitComment = async () => {
     const variables = { pinId: state.currentPin._id, text: comment };
-    const { createComment } = await client.request(
+    /*const { createComment } =*/ await client.request(
       CREATE_COMMENT_MUTATION,
       variables
     );
     setComment('');
-    dispatch({ type: 'CREATE_COMMENT', payload: createComment });
+    // dispatch({ type: 'CREATE_COMMENT', payload: createComment });
+    // We no longer need to dispatch, if a comment is updated apollo is subscribe  to the createComment mutation /* see resolvers */
   };
 
   return (

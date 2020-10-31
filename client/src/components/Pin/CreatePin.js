@@ -58,7 +58,9 @@ const CreatePin = ({ classes }) => {
       // dispatch({ type: 'GET_PINS', payload: getPins });
 
       // or just add the result of the successful mutation  in the current pins in the state
-      dispatch({ type: 'CREATE_PIN', payload: createPin });
+      // dispatch({ type: 'CREATE_PIN', payload: createPin });
+
+      // We move the dispatch to the parent component(Map) as a subscription, see resolvers createPin
     } catch (error) {
       setSubmitting(false);
       console.error('Error creating pin', error);

@@ -12,18 +12,14 @@ const Blog = ({ classes }) => {
   let BlogContent;
 
   if (!draft && !currentPin) {
-    BlogContent = NoContent;
+    BlogContent = <NoContent />;
   } else if (draft && !currentPin) {
-    BlogContent = CreatePin;
+    BlogContent = <CreatePin />;
   } else if (!draft && currentPin) {
-    BlogContent = PinContent;
+    BlogContent = <PinContent />;
   }
 
-  return (
-    <Paper className={classes.root}>
-      <BlogContent />
-    </Paper>
-  );
+  return <Paper className={classes.root}>{BlogContent}</Paper>;
 };
 
 const styles = {

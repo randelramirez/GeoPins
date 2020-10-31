@@ -108,19 +108,14 @@ const Map = ({ classes }) => {
   const handleDeletePin = async (pin) => {
     const variables = { pinId: pin._id };
 
-    const token = window.gapi.auth2
-      .getAuthInstance()
-      .currentUser.get()
-      .getAuthResponse().id_token;
-    console.log('token', token);
-    //  setIdToken(token);
-    console.log('client', client.current);
-    const { deletePin } = await client.current.request(
+    /*const { deletePin } =*/ await client.current.request(
       DELETE_PIN_MUTATION,
       variables
     );
 
-    dispatch({ type: 'DELETE_PIN', payload: deletePin });
+    // dispatch({ type: 'DELETE_PIN', payload: deletePin });
+    // No need to dispatch, we're using apollo subscription, see resolvers deletePin
+
     setPopup(null);
   };
 
@@ -206,13 +201,27 @@ const Map = ({ classes }) => {
         )}
       </ReactMapGL>
       {/* Subscriptions for creating / Updating / Deleting Pins */}
-      {/* <Subscription
+      <Subscription
         subscription={PIN_ADDED_SUBSCRIPTION}
         onSubscriptionData={({ subscriptionData }) => {
           const { pinAdded } = subscriptionData.data;
           dispatch({ type: 'CREATE_PIN', payload: pinAdded });
         }}
-      /> */}
+      />
+      <Subscription
+        subscription={PIN_UPDATED_SUBSCRIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { pinUpdated } = subscriptionData.data;
+          dispatch({ type: 'CREATE_COMMENT', payload: pinUpdated });
+        }}
+      />
+      <Subscription
+        subscription={PIN_DELETED_SUBSCRIPTION}
+        onSubscriptionData={({ subscriptionData }) => {
+          const { pinDeleted } = subscriptionData.data;
+          dispatch({ type: 'DELETE_PIN', payload: pinDeleted });
+        }}
+      />
 
       {/* Blog Area to Add Pin Content */}
       <Blog />
