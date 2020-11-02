@@ -23,6 +23,7 @@ import {
   PIN_UPDATED_SUBSCRIPTION,
   PIN_DELETED_SUBSCRIPTION,
 } from '../graphql/subscriptions';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const INITIAL_VIEW_PORT = {
   latitude: 37.7577,
@@ -31,11 +32,14 @@ const INITIAL_VIEW_PORT = {
 };
 
 const Map = ({ classes }) => {
+  console.log('Map executing');
   const { state, dispatch } = useContext(Context);
   const [viewport, setViewPort] = useState(INITIAL_VIEW_PORT);
   const [userPosition, setUserPosition] = useState(null);
   const [popup, setPopup] = useState(null);
   const client = useRef(useClient());
+  // if it its less than 650px, it will return true
+  const mobileSize = useMediaQuery('(max-width: 650px)');
 
   /*
     we need to wrap it in useRef because it's an object and its value is always treated as new on each render 
@@ -87,6 +91,24 @@ const Map = ({ classes }) => {
     return () => (mounted = false);
   }, [getPins]);
 
+  useEffect(() => {
+    const pinExists = popup && state.pins.find((pin) => pin._id === popup._id);
+
+    if (!pinExists) {
+      // fix for when we have simulataneuos users, if one user has the pin selected and it was deleted by another session
+      // we unselect the pin and clear the popup/blog content screen
+
+      /*
+        subscription is executed
+        reducer is executed (from useReducer defined in index)
+        index and child component is re-rendering (index re-rendering because Context is defined there and its value changed also dispatch of useReducer causes update/re-render)  
+        Map is re-renderered
+      */
+
+      setPopup(null);
+    }
+  }, [popup, state.pins]);
+
   const handleMapClick = ({ lngLat, leftButton }) => {
     if (!leftButton) return;
     if (!state.draft) {
@@ -120,7 +142,7 @@ const Map = ({ classes }) => {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={mobileSize ? classes.rootMobile : classes.root}>
       {/*height of the viewport - height of the header */}
       <ReactMapGL
         onClick={(event) => handleMapClick(event)}
@@ -128,6 +150,7 @@ const Map = ({ classes }) => {
         height="calc(100vh - 64px)"
         mapStyle="mapbox://styles/mapbox/streets-v9"
         mapboxApiAccessToken="pk.eyJ1IjoicmFuZGVsciIsImEiOiJja2dyb2xmdmMxMmV1MnFxaXF1cm14M2R2In0.Jv3sAJKddnAMvfzog5ntQA"
+        scrollZoom={!mobileSize}
         onViewportChange={(newViewPort) => setViewPort(newViewPort)}
         {...viewport}
       >
@@ -218,6 +241,7 @@ const Map = ({ classes }) => {
       <Subscription
         subscription={PIN_DELETED_SUBSCRIPTION}
         onSubscriptionData={({ subscriptionData }) => {
+          console.log('subscription delete executing');
           const { pinDeleted } = subscriptionData.data;
           dispatch({ type: 'DELETE_PIN', payload: pinDeleted });
         }}

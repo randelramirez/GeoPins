@@ -12,6 +12,7 @@ import SaveIcon from '@material-ui/icons/SaveTwoTone';
 import { GET_PINS_QUERY } from '../../graphql/queries';
 import { CREATE_PIN_MUTATION } from '../../graphql/mutations';
 import { useClient } from '../../client';
+import { useMediaQuery } from '@material-ui/core';
 
 const CreatePin = ({ classes }) => {
   const [title, setTitle] = useState('');
@@ -20,6 +21,7 @@ const CreatePin = ({ classes }) => {
   const { state, dispatch } = useContext(Context);
   const [submitting, setSubmitting] = useState(false);
   const client = useClient();
+  const mobileSize = useMediaQuery('(max-width: 650px)');
 
   const handleImageUpload = async () => {
     const data = new FormData();
@@ -115,8 +117,8 @@ const CreatePin = ({ classes }) => {
           name="content"
           label="content"
           multiline
-          rows="6"
           margin="normal"
+          rows={mobileSize ? '3' : '6'}
           fullWidth
           variant="outlined"
           onChange={(event) => setContent(event.target.value)}
